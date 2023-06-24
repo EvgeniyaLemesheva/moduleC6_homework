@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>WebSocket Chat</title>
+</head>
+<body>
+  <div id="chat">
+    <div id="messages"></div>
+    <input type="text" id="messageInput" placeholder="Введите сообщение">
+    <button id="sendButton">Отправить</button>
+    <button id="locationButton">Геолокация</button>
+  </div>
+
+  <script>
+    const chatWindow = document.getElementById('messages');
+    const messageInput = document.getElementById('messageInput');
+    const sendButton = document.getElementById('sendButton');
+    const locationButton = document.getElementById('locationButton');
+
+    const webSocket = new WebSocket('wss://echo-ws-service.herokuapp.com');
+
+    // Функция для добавления сообщения в окно переписки
+    function addMessageToChat(message) {
+      const messageElement = document.createElement('div');
+      messageElement.textContent = message;
+      chatWindow.appendChild(messageElement);
+    }
+
+    // Обработчик клика на кнопке "Отправить"
+    sendButton.addEventListener('click', () => {
+      const message = messageInput.value;
+      if (message.trim() !== '') {
+        webSocket.send(message);
+        addMessageToChat(`Вы: ${message}`);
+        messageInput.value = '';
+      }
+    });
+
+    // Обработчик клика на кнопке "Геолокация"
+    locationButton.addEventListener('click', () => {
+      if ('geolocation' in navigator) {
+        navigator.geolocation.getCurrentPosition(position => {
+          const { latitude, longitude } = position.coords;
+          const locationURL = `https://www.openstreetmap.org/?mlat=${latitude}&mlon=${longitude}#map=17/${latitude}/${longitude}`;
+          addMessageToChat(`<a href="${locationURL}" target="_blank">Моя геолокация</a>`);
+          webSocket.send(`Геолокация: ${latitude},${longitude}`);
+        }, error => {
+          console.error(error);
+        });
+      } else {
+        alert('Геолокация не поддерживается в вашем браузере.');
+      }
+    });
+
+    // Обработчик новых сообщений от сервера
+    webSocket.addEventListener('message', event => {
+      const message = event.data;
+      addMessageToChat(`Сервер: ${message}`);
+    });
+
+    // Обработчик закрытия соединения
+    webSocket.addEventListener('close', () => {
+      addMessageToChat('Соединение закрыто');
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Кнопка с выводом размеров экрана</title>
+  <style>
+    .button {
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <button class="button" onclick="showScreenSize()">Получить размер экрана</button>
+
+  <script>
+    function showScreenSize() {
+      const screenWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+      const screenHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+      const screenSizeText = `Размер экрана: ${screenWidth} x ${screenHeight}`;
+      window.alert(screenSizeText);
+    }
+  </script>
+</body>
+</html>

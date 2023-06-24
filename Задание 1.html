@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Toggle Icon Button</title>
+  <style>
+    .toggle-button {
+      display: inline-block;
+      padding: 8px;
+      border: none;
+      background-color: transparent;
+      cursor: pointer;
+    }
+
+    .toggle-icon {
+      width: 24px;
+      height: 24px;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+  </style>
+</head>
+<body>
+  <button id="toggleButton" class="toggle-button">
+    <span id="toggleIcon" class="toggle-icon"></span>
+  </button>
+
+  <script>
+    const toggleButton = document.getElementById('toggleButton');
+    const toggleIcon = document.getElementById('toggleIcon');
+    let isIconToggle = false;
+
+    toggleButton.addEventListener('click', () => {
+      isIconToggle = !isIconToggle;
+      toggleIcon.style.backgroundImage = `url(${isIconToggle ? 'https://icons.getbootstrap.com/assets/icons/arrow-down-left-circle-fill.svg' : 'https://icons.getbootstrap.com/assets/icons/arrow-down-left-circle.svg'})`;
+    });
+  </script>
+</body>
+</html>
